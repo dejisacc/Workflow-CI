@@ -3,6 +3,7 @@ import pandas as pd
 import mlflow
 import mlflow.sklearn
 from sklearn.cluster import KMeans
+import joblib
 
 def train_model():
     # 1. Mengatur rute dinamis (Dynamic Path)
@@ -42,6 +43,19 @@ def train_model():
         
         model = KMeans(n_clusters=n_clusters, init='k-means++', random_state=42, n_init=10)
         model.fit(df_clean)
+
+        # Save model
+        # Membuat path ke folder 'model' yang sejajar dengan modelling.py
+        model_dir = os.path.abspath(os.path.join(BASE_DIR, "model"))
+        
+        # Pastikan folder 'model' ada (jika belum, buat otomatis)
+        if not os.path.exists(model_dir):
+            os.makedirs(model_dir)
+            
+        # Simpan model
+        joblib.dump(model, os.path.join(model_dir, "kmeans_model.joblib"))
+        print(f"\n[SUKSES] Model berhasil disimpan di: {os.path.join(model_dir, 'kmeans_model.joblib')}")
+        # ----------------------------------------------
         
         run_id = run.info.run_id
         print(f"\n[SUKSES] Model berhasil dilatih! Run ID: {run_id}")
