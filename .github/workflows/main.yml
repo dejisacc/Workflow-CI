@@ -25,6 +25,9 @@ jobs:
     # 3. Menginstal library yang dibutuhkan dengan masuk ke folder MLProject
     - name: Install Dependencies
       run: |
+        # cek ada folder apa saja 
+        ls -R
+        # Sesuaikan cd dengan hasil ls di atas
         cd MLProject
         pip install pandas scikit-learn mlflow numpy joblib
 
