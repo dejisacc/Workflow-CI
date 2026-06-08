@@ -1,0 +1,49 @@
+name: Customer Segmentation Pipeline
+
+# Workflow ini akan berjalan otomatis setiap kali kamu melakukan 'git push' ke branch utama (main/master)
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest # Menggunakan komputer virtual Linux dari GitHub
+
+    steps:
+    # 1. Mengambil seluruh kodinganmu dari repositori GitHub
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    # 2. Menyiapkan environment Python (Persis seperti di Dockerfile)
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    # 3. Menginstal library yang dibutuhkan dengan masuk ke folder MLProject
+    - name: Install Dependencies
+      run: |
+        cd MLProject
+        pip install pandas scikit-learn mlflow numpy joblib
+
+    # 4. Menjalankan script ML untuk memastikan tidak ada error (Testing)
+    - name: Run Machine Learning Model
+      run: |
+        cd MLProject
+        python modelling.py
+
+    # 5. Membungkus (Build) Docker Image untuk memastikan Dockerfile-mu tidak bermasalah
+    - name: Test Docker Build
+      run: |
+        cd MLProject
+        docker build -t test-segmentation-image:latest .
+
+    # 6. Menyimpan Artefak Data Bersih & Model (.joblib) ke dalam GitHub Actions
+    - name: Upload Preprocessed Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: customer-segmentation-artifacts
+        path: MLProject/Customer_shopping_preprocessing/
+        retention-days: 7
