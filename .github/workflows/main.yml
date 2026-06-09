@@ -31,10 +31,10 @@ jobs:
         cd MLProject
         pip install pandas scikit-learn mlflow numpy joblib
 
-    # 4. Menjalankan script ML untuk memastikan tidak ada error (Testing)
-    - name: Run Machine Learning Model
+    # 4. Menjalankan script ML
+    - name: Run mlflow project
       run: |
-        mlflow run ./Workflow-CI/MLProject --env-manager=local
+        mlflow run MLProject --env-manager=local --experiment-name="Submission Membangun Sistem Machine Learning - KMeans Clustering"
 
     # 5. Build Docker Image 
     - name: Test Docker Build
