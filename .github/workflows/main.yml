@@ -16,19 +16,19 @@ jobs:
     - name: Run actions/checkout@v3
       uses: actions/checkout@v4
 
-    # 2. Menyiapkan environment Python (Versi 3.10 tidak masalah)
+    # 2. Menyiapkan environment Python 3.10
     - name: Set up Python 3.10
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
-    # 3. Menambahkan tahap Check Env sesuai gambar
+    # 3. Menambahkan tahap Check Env
     - name: Check Env
       run: |
         python --version
         pip --version
 
-    # 4. Menyamakan nama dan menginstal dependencies secara global
+    # 4. Menyamakan nama dan menginstal dependencies 
     - name: Install dependencies
       run: |
         pip install pandas scikit-learn mlflow numpy joblib
@@ -38,7 +38,7 @@ jobs:
       run: |
         mlflow run MLProject --env-manager=local --experiment-name="Submission Membangun Sistem Machine Learning - KMeans Clustering"
 
-    # 6. Menambahkan tahap Run ID sesuai gambar
+    # 6. Menambahkan tahap Run ID 
     - name: Get latest MLflow run_id
       run: |
         python -c "
@@ -55,7 +55,7 @@ jobs:
             print('Run ID tidak ditemukan.')
         "
 
-    # 7. Build Docker Image (Tetap dipertahankan untuk kebutuhan tugas)
+    # 7. Build Docker Image 
     - name: Test Docker Build
       run: |
         cd MLProject
