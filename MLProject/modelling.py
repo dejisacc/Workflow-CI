@@ -5,6 +5,8 @@ import mlflow.sklearn
 from sklearn.cluster import KMeans
 import joblib
 
+os.environ.pop("MLFLOW_RUN_ID", None)
+
 def train_model():
     # 1. Mengatur rute dinamis (Dynamic Path)
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -34,7 +36,7 @@ def train_model():
     
     # 4. Melatih Model K-Means
     print("Memulai pencatatan ke MLflow Tracking UI (SQLite)...")
-    with mlflow.start_run(run_name="KMeans_SQLite_Run", nested=True) as run:
+    with mlflow.start_run(run_name="KMeans_SQLite_Run") as run:
         n_clusters = 4
         print(f"Melatih model K-Means dengan {n_clusters} klaster...")
         
