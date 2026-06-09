@@ -34,7 +34,7 @@ jobs:
     # 4. Menjalankan script ML untuk memastikan tidak ada error (Testing)
     - name: Run Machine Learning Model
       run: |
-        mlflow run MLProject --env-manager=local
+        mlflow run ./Workflow-CI/MLProject --env-manager=local
 
     # 5. Build Docker Image 
     - name: Test Docker Build
