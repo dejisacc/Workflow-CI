@@ -1,6 +1,6 @@
 name: Customer Segmentation Pipeline
 
-# Workflow ini akan berjalan otomatis setiap kali kamu melakukan 'git push' ke branch utama (main/master)
+# Workflow ini akan berjalan otomatis setiap kali 'git push' ke branch utama (main/master)
 on:
   push:
     branches: [ "main", "master" ]
@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest # Menggunakan komputer virtual Linux dari GitHub
+    runs-on: ubuntu-latest 
 
     steps:
     # 1. Mengambil seluruh kodingan dari repositori GitHub
@@ -34,7 +34,7 @@ jobs:
     # 4. Menjalankan script ML untuk memastikan tidak ada error (Testing)
     - name: Run Machine Learning Model
       run: |
-        mlflow run MLproject --env-manager=local
+        mlflow run MLProject --env-manager=local
 
     # 5. Build Docker Image 
     - name: Test Docker Build

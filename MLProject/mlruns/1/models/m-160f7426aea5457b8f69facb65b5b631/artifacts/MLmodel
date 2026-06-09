@@ -1,0 +1,42 @@
+artifact_path: file:C:/Users/LENOVO/Desktop/kulyeahhhhhh/Pijak/MSML_Firda-Azzahra/Workflow-CI/MLProject/mlruns/1/models/m-160f7426aea5457b8f69facb65b5b631/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.3
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.9.0
+    skops_trusted_types: null
+is_signature_from_type_hint: false
+mlflow_version: 3.13.0
+model_id: m-160f7426aea5457b8f69facb65b5b631
+model_size_bytes: 17151
+model_uuid: m-160f7426aea5457b8f69facb65b5b631
+prompts: null
+run_id: 062f4b7af1f1404bb4078f8a6da8166c
+signature:
+  inputs: '[{"type": "double", "name": "Age", "required": true}, {"type": "long",
+    "name": "Gender", "required": true}, {"type": "long", "name": "Item Purchased",
+    "required": true}, {"type": "long", "name": "Category", "required": true}, {"type":
+    "double", "name": "Purchase Amount (USD)", "required": true}, {"type": "long",
+    "name": "Location", "required": true}, {"type": "long", "name": "Size", "required":
+    true}, {"type": "long", "name": "Color", "required": true}, {"type": "long", "name":
+    "Season", "required": true}, {"type": "double", "name": "Review Rating", "required":
+    true}, {"type": "long", "name": "Subscription Status", "required": true}, {"type":
+    "long", "name": "Payment Method", "required": true}, {"type": "long", "name":
+    "Shipping Type", "required": true}, {"type": "long", "name": "Discount Applied",
+    "required": true}, {"type": "long", "name": "Promo Code Used", "required": true},
+    {"type": "double", "name": "Previous Purchases", "required": true}, {"type": "long",
+    "name": "Preferred Payment Method", "required": true}, {"type": "long", "name":
+    "Frequency of Purchases", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int32", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2026-06-09 08:06:08.991631'

@@ -6,9 +6,9 @@ from sklearn.cluster import KMeans
 import joblib
 
 def train_model():
+    # 1. Mengatur rute dinamis (Dynamic Path)
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    
-    data_path = os.path.join(BASE_DIR, "shopping_trends_preprocessed.csv")
+    data_path = os.path.abspath(os.path.join(BASE_DIR, "shopping_trends_preprocessed.csv"))
         
     print(f"Membaca data hasil preprocessing dari:\n{data_path}\n")
     
@@ -16,32 +16,44 @@ def train_model():
         print("Peringatan: File dataset tidak ditemukan.")
         return
 
+    # Load dataset ke variabel df_clean
     df_clean = pd.read_csv(data_path)
     
+    # 2. Pengaturan MLflow Tracking Menggunakan SQLite Backend
     db_path = os.path.join(BASE_DIR, "mlflow.db")
-    sqlite_uri = f"sqlite:///{db_path.replace(os.sep, '/')}"
     
+    # Mengonversi format slash agar dikenali oleh SQLAlchemy URI
+    sqlite_uri = f"sqlite:///{db_path.replace(os.sep, '/')}"
     mlflow.set_tracking_uri(sqlite_uri)
+    
+    # Menentukan nama eksperimen di database
     mlflow.set_experiment("Submission Membangun Sistem Machine Learning - KMeans Clustering")
+    
+    # 3. Mengaktifkan Autolog MLflow
     mlflow.sklearn.autolog(log_models=True)
     
+    # 4. Melatih Model K-Means
     print("Memulai pencatatan ke MLflow Tracking UI (SQLite)...")
-    with mlflow.start_run(run_name="KMeans_SQLite_Run") as run:
+    with mlflow.start_run(run_name="KMeans_SQLite_Run", nested=True) as run:
         n_clusters = 4
         print(f"Melatih model K-Means dengan {n_clusters} klaster...")
         
         model = KMeans(n_clusters=n_clusters, init='k-means++', random_state=42, n_init=10)
         model.fit(df_clean)
 
-        model_dir = os.path.join(BASE_DIR, "model")
+        # Save model
+        model_dir = os.path.abspath(os.path.join(BASE_DIR, "model"))
         if not os.path.exists(model_dir):
             os.makedirs(model_dir)
             
+        # Simpan model dalam format .joblib
         joblib.dump(model, os.path.join(model_dir, "kmeans_model.joblib"))
         print(f"\n[SUKSES] Model berhasil disimpan di: {os.path.join(model_dir, 'kmeans_model.joblib')}")
     
+        
         run_id = run.info.run_id
         print(f"\n[SUKSES] Model berhasil dilatih! Run ID: {run_id}")
+        print(f"Semua histori tracking berhasil dikunci di:\n{db_path}")
 
 if __name__ == "__main__":
     train_model()
