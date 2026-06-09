@@ -12,37 +12,56 @@ jobs:
     runs-on: ubuntu-latest 
 
     steps:
-    # 1. Mengambil seluruh kodingan dari repositori GitHub
-    - name: Checkout Code
+    # 1. Menyamakan nama dengan gambar
+    - name: Run actions/checkout@v3
       uses: actions/checkout@v4
 
-    # 2. Menyiapkan environment Python
+    # 2. Menyiapkan environment Python (Versi 3.10 tidak masalah)
     - name: Set up Python 3.10
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
-    # 3. Menginstal library yang dibutuhkan dengan masuk ke folder MLProject
-    - name: Install Dependencies
+    # 3. Menambahkan tahap Check Env sesuai gambar
+    - name: Check Env
       run: |
-        # cek ada folder apa saja 
-        ls -R
-        # Sesuaikan cd dengan hasil ls di atas
-        cd MLProject
+        python --version
+        pip --version
+
+    # 4. Menyamakan nama dan menginstal dependencies secara global
+    - name: Install dependencies
+      run: |
         pip install pandas scikit-learn mlflow numpy joblib
 
-    # 4. Menjalankan script ML untuk memastikan tidak ada error (Testing)
-    - name: Run Machine Learning Model
+    # 5. Menjalankan script ML
+    - name: Run mlflow project
       run: |
-        mlflow run ./Workflow-CI/MLProject --env-manager=local
+        mlflow run MLProject --env-manager=local --experiment-name="Submission Membangun Sistem Machine Learning - KMeans Clustering"
 
-    # 5. Build Docker Image 
+    # 6. Menambahkan tahap Run ID sesuai gambar
+    - name: Get latest MLflow run_id
+      run: |
+        python -c "
+        import mlflow
+        import os
+        
+        db_path = os.path.abspath('MLProject/mlflow.db')
+        mlflow.set_tracking_uri(f'sqlite:///{db_path}')
+        
+        runs = mlflow.search_runs(experiment_names=['Submission Membangun Sistem Machine Learning - KMeans Clustering'])
+        if not runs.empty:
+            print(f'Latest MLflow Run ID: {runs.iloc[0].run_id}')
+        else:
+            print('Run ID tidak ditemukan.')
+        "
+
+    # 7. Build Docker Image (Tetap dipertahankan untuk kebutuhan tugas)
     - name: Test Docker Build
       run: |
         cd MLProject
         docker build -t test-segmentation-image:latest .
 
-    # 6. Menyimpan Artefak Data Bersih & Model (.joblib) ke dalam GitHub Actions
+    # 8. Menyimpan Artefak Data Bersih & Model
     - name: Upload Preprocessed Artifacts and Model
       uses: actions/upload-artifact@v4
       with:
